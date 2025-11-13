@@ -7,11 +7,11 @@
 2. temps de traitement de la conversion des triangles vers le binaire :
     - test avec 1 triangles pour avoir le temps le plus court
     - test avec une 10 triangles pour avoir un temps moyen
-    - test avec une 20 triangles pour avoir le cas d'une situation complexe
+    - test avec une 30 triangles pour avoir le cas d'une situation complexe
 
 3. temps de traitement de la conversion d'un PointSet depuis le binaire :
     - test avec 3 point pour avoir le temps le plus court
-    - test avec une 20 de point pour avoir un temps moyen
+    - test avec une 15 de point pour avoir un temps moyen
     - test avec une 40 pour avoir le cas d'une situation complexe
 
 
@@ -21,7 +21,7 @@
 1. test api : tests permetant de test les requetes de cette api et de l'autre api dans une situation normal et avec erreur **(l'autre api est mocker durant ces test)**
     - cas normal appel d'une autre api : requete pour recupere PointSet
     - cas normal reception : appel de cette api
-    - PointSetManager n'a pas pue se connecter avec l'API et retourne l'erreur 503
+    - PointSetManager n'a pas pu se connecter avec l'API et retourne l'erreur 503
     - PointSETID n'existe pas : identifiant invalide et retourne l'erreur 404
     - PointSetID erreur format : indentifinat dans le mauvais format et retourne l'erreur 400
 
