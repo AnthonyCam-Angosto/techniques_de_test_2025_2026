@@ -1,4 +1,5 @@
 from unittest.mock import patch
+from urllib.error import HTTPError
 from src.api import app
 from src import pointSetManager
 
@@ -17,30 +18,6 @@ def test_normal_triangulation(mock_triangulation,mock_conv_point,mock_appel,mock
     rep=client.post("/triangulation/123e4567-e89b-12d3-a456-426614174000")
     assert rep.status_code==200
     assert rep.data=="000001001001010100101"
-
-@patch("subprocess.run")
-def test_appel_manager(mock_request):
-    mock_request.return_value.status_code = 200
-    mock_request.return_value.json.return_value = {"PointSet": "0000100010101011010101"}
-    id_ps="123e4567-e89b-12d3-a456-426614174000"
-    result=pointSetManager.appel(id_ps)
-    assert type(result)==type(str)
-
-@patch("subprocess.run")
-def test_appel_manager_erreur_db(mock_request):
-    mock_request.return_value.status_code = 503
-    mock_request.return_value.json.return_value = {"error": "error"}
-    id_ps="123e4567-e89b-12d3-a456-426614174000"
-    result=pointSetManager.appel(id_ps)
-    assert result==1
-
-@patch("subprocess.run")
-def test_appel_manager_erreur_not_found(mock_request):
-    mock_request.return_value.status_code = 404
-    mock_request.return_value.json.return_value = {"error": "error"}
-    id_ps="123e4567-e89b-12d3-a456-426614174000"
-    result=pointSetManager.appel(id_ps)
-    assert result==2
 
 @patch("PointSetManager.Appel")
 def test_appel_erreur(mock_appel):
@@ -66,3 +43,42 @@ def test_id_format():
 
     rep=client.post("/triangulation/123e4567")
     assert rep.status_code==400
+
+
+
+class _DummyHeaders:
+    def get_content_charset(self):
+        return "utf-8"
+    
+class _DummyResponse:
+    def __init__(self, data: bytes):
+        self._data = data
+        self.headers = _DummyHeaders()
+
+    def read(self):
+        return self._data
+
+
+def test_appel_manager(monkeypatch):
+    dummy=_DummyResponse(b"0000100010101011010101")
+    monkeypatch.setattr(pointSetManager.request, "urlopen", lambda url: dummy)
+    id_ps="123e4567-e89b-12d3-a456-426614174000"
+    result=pointSetManager.appel(id_ps)
+    assert isinstance(result,str)
+
+
+def test_appel_manager_erreur_db(monkeypatch):
+    def raiser(url):    
+        raise HTTPError("http://",503,"The PointSet storage layer (database) is unavailable.",None,None)# type: ignore 
+    monkeypatch.setattr(pointSetManager.request,"urlopen",raiser)
+    id_ps="123e4567-e89b-12d3-a456-426614174000"
+    result=pointSetManager.appel(id_ps)
+    assert result==1
+
+def test_appel_manager_erreur_not_found(monkeypatch):
+    def raiser(url):    
+        raise HTTPError("http://",404,"A PointSet with the specified ID was not found.",None,None)# type: ignore 
+    monkeypatch.setattr(pointSetManager.request,"urlopen",raiser)
+    id_ps="123e4567-e89b-12d3-a456-426614174000"
+    result=pointSetManager.appel(id_ps)
+    assert result==2
