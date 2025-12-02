@@ -1,4 +1,5 @@
 from src.conversion import conversion_point
+import pytest
 
 def create_data():
     data_point=[[3,3],[0,1],[5,6]]
@@ -18,12 +19,15 @@ def test_normal():
 
 def test_structure():
     binary,_=create_data()
-    points=conversion_point(binary+"1")
-    assert points==None
+
+    with pytest.raises(Exception) as exc:
+        conversion_point(binary+"1")
+    assert exc.value.args[0]=="erreur structure binaire"
 
 def test_type():
-    points=conversion_point("321457805")
-    assert points==None
+    with pytest.raises(Exception) as exc:
+        conversion_point("321457805")
+    assert exc.value.args[0]=="erreur structure binaire"
 
 def test_nb_point():
     data_point=[[3,3],[0,1],[5,6]]
@@ -38,9 +42,11 @@ def test_nb_point():
         assert points[i].y==data_point[i][1]
 
 def test_null():
-    points=conversion_point(None)
-    assert points==None
+    with pytest.raises(Exception) as exc:
+        conversion_point(None) # type: ignore
+    assert exc.value.args[0]=="erreur binaire inexistant"
 
 def test_vide():
-    points=conversion_point("")
-    assert points==None
+    with pytest.raises(Exception) as exc:
+        conversion_point("")
+    assert exc.value.args[0]=="erreur binaire vide"

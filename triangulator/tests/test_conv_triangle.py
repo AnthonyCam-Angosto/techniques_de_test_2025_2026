@@ -1,3 +1,4 @@
+import pytest
 from src.conversion import conversion_triangle
 from src.object import Triangle,Point
 
@@ -25,8 +26,9 @@ def test_normal():
     assert binary==binary_test
 
 def test_null():
-    binary=conversion_triangle(None)
-    assert binary==None
+    with pytest.raises(Exception) as exc:
+        conversion_triangle(None)
+    assert exc.value.args[0]=="erreur binaire inexistant"
 
 def test_vide():
     binary=conversion_triangle(list())
