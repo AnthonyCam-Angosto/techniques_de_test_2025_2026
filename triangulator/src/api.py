@@ -1,7 +1,16 @@
 from flask import Flask
 
-flask=Flask(__name__)
+app=Flask(__name__)
 
-@flask.route("/triangulation/str:<pointSetId>", methods=['POST'])
-def triangulation(pointSetId:str):
-    pass
+@app.route("/triangulation/str:<pointSetId>", methods=['GET'])
+def triangulation(pointsetid:str):
+    """
+    requete principal de l'api
+    Params:
+        pointSetId(str):identifiant du pointSet en uuid
+    
+    Returns:
+        reponse(str)
+        code(int)
+    """
+    return "not implemented",201

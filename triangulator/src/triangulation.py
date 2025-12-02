@@ -1,5 +1,5 @@
 from src.object import Triangle
 
 
-def start(Points)->list[Triangle]:
+def start(points)->list[Triangle]:
     pass

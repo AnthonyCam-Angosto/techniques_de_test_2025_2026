@@ -14,7 +14,7 @@ lint:
 	ruff check src
 
 doc:
-	pdoc3
+	pdoc3 src
 
 help:
 	@echo "test"
