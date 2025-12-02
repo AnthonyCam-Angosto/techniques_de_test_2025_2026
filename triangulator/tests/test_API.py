@@ -3,11 +3,11 @@ from urllib.error import HTTPError
 from src.api import app
 from src import pointSetManager
 
-@patch("triangulation.main")
-@patch("conversion.conversion_point")
-@patch("pointSetManager.appel")
-@patch("conversion.conversion_triangle")
-def test_normal_triangulation(mock_triangulation,mock_conv_point,mock_appel,mock_conv_triangle):
+@patch("src.triangulation.start")
+@patch("src.conversion.conversion_point")
+@patch("src.pointSetManager.appel")
+@patch("src.conversion.conversion_triangle")
+def test_normal_triangulation(mock_conv_triangle,mock_appel,mock_conv_point,mock_triangulation):
     app.testing = True
     client=app.test_client()
     mock_triangulation.return_value=[]
@@ -15,33 +15,33 @@ def test_normal_triangulation(mock_triangulation,mock_conv_point,mock_appel,mock
     mock_appel.return_value="011525"
     mock_conv_triangle.return_value="000001001001010100101"
 
-    rep=client.post("/triangulation/123e4567-e89b-12d3-a456-426614174000")
+    rep=client.get("/triangulation/123e4567-e89b-12d3-a456-426614174000")
     assert rep.status_code==200
-    assert rep.data=="000001001001010100101"
+    assert rep.data==b'000001001001010100101'
 
-@patch("PointSetManager.Appel")
+@patch("src.pointSetManager.appel")
 def test_appel_erreur(mock_appel):
     app.testing = True
     client=app.test_client()
     mock_appel.return_value=1
 
-    rep=client.post("/triangulation/123e4567-e89b-12d3-a456-426614174000")
+    rep=client.get("/triangulation/123e4567-e89b-12d3-a456-426614174000")
     assert rep.status_code==503
 
-@patch("PointSetManager.Appel")
+@patch("src.pointSetManager.appel")
 def test_id_notfound(mock_appel):
     app.testing = True
     client=app.test_client()
     mock_appel.return_value=2
 
-    rep=client.post("/triangulation/123e4567-e89b-12d3-a456-426614174000")
+    rep=client.get("/triangulation/123e4567-e89b-12d3-a456-426614174000")
     assert rep.status_code==404
 
 def test_id_format():
     app.testing = True
     client=app.test_client()
 
-    rep=client.post("/triangulation/123e4567")
+    rep=client.get("/triangulation/123e4567")
     assert rep.status_code==400
 
 

@@ -14,7 +14,6 @@ def appel(id:str)->str|int:
     try:
         request_url = request.urlopen(F'http://f"PointSetManager/pointset/{id}"')
         result=request_url.read().decode(request_url.headers.get_content_charset())
-        print(result)
         return result
     except HTTPError as error:
         if(error.code==404):
