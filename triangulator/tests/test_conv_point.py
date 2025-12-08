@@ -34,7 +34,7 @@ def test_nb_point():
     binary=format(len(data_point)+1,"032b")
     for data in data_point:
         binary+=format(data[0],"032b")+format(data[1],"032b")
-    points=conversion_point(binary+"1")
+    points=conversion_point(binary)
 
     assert len(points)==len(data_point)
     for i in range(len(data_point)):
