@@ -27,7 +27,7 @@ def test_normal():
 
 def test_null():
     with pytest.raises(Exception) as exc:
-        conversion_triangle(None)
+        conversion_triangle(None) # type: ignore
     assert exc.value.args[0]=="erreur binaire inexistant"
 
 def test_vide():
