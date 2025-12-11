@@ -34,3 +34,32 @@ def test_vide():
     binary=conversion_triangle(list())
     assert binary==(format(0,"032b")+format(0,"032b"))
 
+def test_double():
+    points=[]
+    points.append(Point(0,0))
+    points.append(Point(2,0))
+    points.append(Point(1,2))
+    points.append(Point(3,3))
+    points.append(Point(0,3))
+
+    triangles=[]
+    triangles.append(Triangle(points[0],points[1],points[2]))
+    triangles.append(Triangle(points[0],points[4],points[2]))
+    triangles.append(Triangle(points[1],points[2],points[3]))
+    triangles.append(Triangle(points[2],points[3],points[4]))   
+
+    binary=conversion_triangle(triangles)
+
+    point_test=[]
+    temp=[0,1,2,4,3]
+    binary_test=format(len(temp),"032b")
+    for i in temp:
+        point_test.append(points[i])
+        binary_test+=format(points[i].x,"032b")+format(points[i].y,"032b")
+
+    binary_test+=format(len(triangles),"032b")
+    for triangle in triangles:
+        for point in triangle.get_points():
+            binary_test+=format(point_test.index(point),"032b")
+
+    assert binary==binary_test

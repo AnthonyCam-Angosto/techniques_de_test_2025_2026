@@ -1,16 +1,28 @@
+"""Ce module gere la conversion d'objet en binaire et l'inverse."""
 import re
+
 from src.object import Point, Triangle
 
+
 class ConversionError(Exception):
+    """Exception s'il y a des erreur durant la conversion."""
+    
     pass
 
 def conversion_point(binary:str)->list[Point]:
-    if(binary==None):
+    """Conversion d'un PointSet en binaire en liste d'objet Point.
+
+    Params:
+        binary(str):PointSet en binaire
+    
+    Returns:
+        list[Point]: liste des point du PointSet
+
+    """
+    if(binary is None):
         raise ConversionError("erreur binaire inexistant")
-    if(len(binary)%8!=0 or re.match('[01]+',binary)==False):
+    if(len(binary)%8!=0 or not re.match('[01]+',binary)):
         raise ConversionError("erreur structure binaire")
-    if(binary==""):
-        raise ConversionError("erreur binaire vide")
 
     pointset=[]
     size_byte=4*8
@@ -33,11 +45,21 @@ def conversion_point(binary:str)->list[Point]:
 
 
 def conversion_triangle(triangles:list[Triangle])->str:
-    if(triangles==None):
+    """Conversion d'une liste de triangles en binaire.
+    
+    Params:
+        triangles(list[Triangle]):list de triangle 
+    
+    Returns:
+        str: liste de triangle en binaire
+    """
+    if(triangles is None):
         raise ConversionError("erreur binaire inexistant")
     points=[]
     for t in triangles:
-        points.extend(t.get_points())
+        for point in t.get_points():
+            if(points.__contains__(point)==False):
+                points.append(point)
     
     bin_vert=format(len(points),"032b")
     for point in points:

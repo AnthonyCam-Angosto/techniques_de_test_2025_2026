@@ -1,19 +1,29 @@
 from src.object import Point, Triangle
 
 class TriangulationError(Exception):
+    """Exception s'il y a des erreur durant la triangulation."""
+
     pass
 
 
-def start(points)->list[Triangle]:
-    if(points==None):
+def start(points:list[Point])->list[Triangle]:
+    """Fonction principal de la triangulation.
+    
+    :param points: liste de point
+    :type points: list[Point]
+    :return: liste des triangles trouvé
+    :rtype: list[Triangle]
+    """
+    
+    if(points is None):
             raise TriangulationError("erreur pointset inexistant")
     if(len(points)==0):
             raise TriangulationError("erreur pointset vide")
     
     try:
         triangles=bowyer_watson(points)
-    except Exception:
-        raise TriangulationError("erreur durant la triangulation")
+    except Exception as err:
+        raise TriangulationError("erreur durant la triangulation") from err
 
     return triangles
 
@@ -23,6 +33,15 @@ def det(a: Point, b: Point, c: Point) -> float:
 
 
 def circumcircle_contains(tri: Triangle, p: Point) -> bool:
+    """Verification si le point est de dans le rayon du triangle.
+    
+    :param tri: triangle
+    :type tri: Triangle
+    :param p: point à verfier
+    :type p: Point
+    :return: indique si le point est dans le rayon
+    :rtype: bool
+    """
 
     ax, ay = tri.point1.x, tri.point1.y
     bx, by = tri.point2.x, tri.point2.y
@@ -51,6 +70,10 @@ def circumcircle_contains(tri: Triangle, p: Point) -> bool:
 
 
 def make_supertriangle(points):
+    """Creation d'un triangle contenant tout les points.
+    
+    :param points: liste de points
+    """
 
     xs = [p.x for p in points]
     ys = [p.y for p in points]
@@ -89,8 +112,11 @@ def unique_boundary_edges(edges):
 
 
 def bowyer_watson(points):
-    """
-    triangulation de Delaunay par l'algorithme de Bowyer-Watson
+    """Triangulation de Delaunay par l'algorithme de Bowyer-Watson.
+
+    :param points: liste de point
+    :type points: list[Point]
+
     """
     if len(points) < 3:
         return []

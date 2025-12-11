@@ -15,6 +15,3 @@ lint:
 
 doc:
 	pdoc3 src
-
-help:
-	@echo "test"

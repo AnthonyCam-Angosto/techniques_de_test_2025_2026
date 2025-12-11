@@ -1,27 +1,39 @@
-from operator import truediv
-
+"""Module gerant tout les objets."""
 
 class Point:
-    """
-    objet correspondant a un point
-    """
+    """Objet correspondant a un point."""
+    
     x:int
+    """Coordonée x du point"""
     y:int
+    """Coordonné y du point"""
 
     def __init__(self,x,y):
+        """Initialise de l'objet.
+        
+        :param x: coordonée x du point
+        :param y: coordonée y du point
+        """
         self.x=x
         self.y=y
     
     def __str__(self) -> str:
+        """Genere la transformation en string."""
+
         return f"x={self.x}/y={self.y}"
 
     def __eq__(self, other):
+        """Fonction pour vérifier si 2 objet sont les même.
+        
+        :param other: objet à verifier si c'est le même
+        """
         return isinstance(other, Point) and self.x == other.x and self.y == other.y
     
     def __hash__(self):
         return hash((self.x, self.y))
 
 class Triangle:
+    """Objet correspondant à un triangle."""
     point1:Point
     point2:Point
     point3:Point
@@ -35,6 +47,7 @@ class Triangle:
         return iter([self.point1, self.point2, self.point3])
     
     def get_points(self):
+        """Retourne une liste de point."""
         return [self.point1,self.point2,self.point3]
     
     def edges(self):

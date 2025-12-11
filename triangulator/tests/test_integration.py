@@ -4,7 +4,7 @@ from src.object import Triangle,Point
 
 
 def test_conv_to_triangulation():
-    data_point=[[1,2],[2,3],[3,4],[4,5],[5,6],[7,8]]
+    data_point=[[0,0],[2,0],[1,2],[3,3],[0,3]]
     binary=format(len(data_point),"032b")
     for data in data_point:
         binary+=format(data[0],"032b")+format(data[1],"032b")
@@ -21,24 +21,16 @@ def test_conv_to_triangulation():
 
     triangles_test=list()
     triangles_test.append(Triangle(points[0],points[1],points[2]))
-    triangles_test.append(Triangle(points[0],points[1],points[3]))
-    triangles_test.append(Triangle(points[0],points[1],points[4]))
-    triangles_test.append(Triangle(points[0],points[2],points[3]))
-    triangles_test.append(Triangle(points[0],points[2],points[4]))
-    triangles_test.append(Triangle(points[1],points[3],points[4]))
+    triangles_test.append(Triangle(points[0],points[4],points[2]))    
     triangles_test.append(Triangle(points[1],points[2],points[3]))
-    triangles_test.append(Triangle(points[1],points[2],points[4]))
-    triangles_test.append(Triangle(points[1],points[3],points[4]))
     triangles_test.append(Triangle(points[2],points[3],points[4]))
 
     for i in range(len(triangles_test)):
-        assert triangles[i].point1==triangles_test[i].point1
-        assert triangles[i].point2==triangles_test[i].point2
-        assert triangles[i].point3==triangles_test[i].point3
+        assert triangles.__contains__(triangles_test[i])
 
 
 def test_triangulation_to_conv():
-    points=list()
+    points=[]
     points.append(Point(0,0))
     points.append(Point(2,0))
     points.append(Point(1,2))
@@ -47,25 +39,25 @@ def test_triangulation_to_conv():
 
     triangles=triangulation.start(points)
     binary=conversion_triangle(triangles)
+    print("fin")
 
-    triangles_test=list()
+    triangles_test=[]
     triangles_test.append(Triangle(points[0],points[1],points[2]))
-    triangles_test.append(Triangle(points[0],points[1],points[3]))
-    triangles_test.append(Triangle(points[0],points[1],points[4]))
-    triangles_test.append(Triangle(points[0],points[2],points[3]))
+    triangles_test.append(Triangle(points[2],points[1],points[3]))
     triangles_test.append(Triangle(points[0],points[2],points[4]))
-    triangles_test.append(Triangle(points[1],points[3],points[4]))
-    triangles_test.append(Triangle(points[1],points[2],points[3]))
-    triangles_test.append(Triangle(points[1],points[2],points[4]))
-    triangles_test.append(Triangle(points[1],points[3],points[4]))
-    triangles_test.append(Triangle(points[2],points[3],points[4]))
+    triangles_test.append(Triangle(points[2],points[3],points[4]))  
 
-    binary_test=format(len(points),"032b")
-    for point in points:
-        binary_test+=format(point.x,"032b")+format(point.y,"032b")
+    point_test=[]
+    temp=[0,1,2,3,4]
+    binary_test=format(len(temp),"032b")
+    for i in temp:
+        point_test.append(points[i])
+        binary_test+=format(points[i].x,"032b")+format(points[i].y,"032b")
 
     binary_test+=format(len(triangles_test),"032b")
     for triangle in triangles_test:
-        binary_test+=format(points.index(triangle.point1),"032b")+format(points.index(triangle.point2),"032b")+format(points.index(triangle.point3),"032b")
+        for point in triangle.get_points():
+            binary_test+=format(point_test.index(point),"032b")
+
     assert binary==binary_test
 

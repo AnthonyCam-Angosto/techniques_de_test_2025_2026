@@ -49,4 +49,4 @@ def test_null():
 def test_vide():
     with pytest.raises(Exception) as exc:
         conversion_point("")
-    assert exc.value.args[0]=="erreur binaire vide"
+    assert exc.value.args[0]=="erreur structure binaire"

@@ -1,4 +1,6 @@
+"""Ce module s'occupe de gére l'api."""
 import uuid
+
 from flask import Flask
 
 from src import conversion, pointSetManager, triangulation
@@ -8,14 +10,15 @@ app=Flask(__name__)
 
 @app.route("/triangulation/<pointsetid>", methods=['GET'])
 def get_triangulation(pointsetid):
-    """
-    requete principal de l'api
+    """Requete principal de l'api.
+    
     Params:
         pointSetId(str):identifiant du pointSet en uuid
     
     Returns:
         reponse(str)
         code(int)
+
     """
     try:
         uuid.UUID(pointsetid)
