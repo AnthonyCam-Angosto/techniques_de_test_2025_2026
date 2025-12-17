@@ -3,6 +3,7 @@ from src.object import Triangle,Point
 from src import triangulation
 from src.conversion import conversion_point, conversion_triangle
 import pytest
+import random
 
 logger=logging.getLogger(__name__)
 logging.basicConfig(filename='performance.log', level=logging.INFO)
@@ -82,11 +83,11 @@ def test_perf_triangulation_hard():
 @pytest.mark.perf
 def test_perf_convTriangles_low():
     # 1 triangle
-    points=list()
+    points=[]
     points.append(Point(0,0))
     points.append(Point(2,0))
     points.append(Point(1,2))
-    triangles=list()
+    triangles=[]
     triangles.append(Triangle(points[0],points[1],points[2]))
 
     time1=time.time()
@@ -102,8 +103,9 @@ def test_perf_convTriangles_medium():
     #15 triangles
     points=create_data()
     triangles=list()
-    for i in range(15):
-        triangles.append(Triangle(points[i],points[i+1],points[i+2]))
+    r=random.Random()
+    for _ in range(30):
+        triangles.append(Triangle(points[r.randint(0,14)],points[r.randint(0,14)],points[r.randint(0,14)]))
 
     time1=time.time()
     val=conversion_triangle(triangles)
@@ -118,8 +120,9 @@ def test_perf_convTriangles_hard():
     #30 triangles
     points=create_data(hard=True)
     triangles=list()
-    for i in range(30):
-        triangles.append(Triangle(points[i],points[i+1],points[i+2]))
+    r=random.Random()
+    for _ in range(30):
+        triangles.append(Triangle(points[r.randint(0,24)],points[r.randint(0,24)],points[r.randint(0,24)]))
 
     time1=time.time()
     val=conversion_triangle(triangles)

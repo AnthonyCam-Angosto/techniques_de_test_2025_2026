@@ -31,7 +31,8 @@ def get_triangulation(pointsetid):
         if(pointset_bin==2):
             return "A PointSet with the specified ID was not found.",404
         else:
-            return "Service unavailable, e.g. communication with PointSetManager failed.",503
+            message="Service unavailable: communication with PointSetManager failed."
+            return message,503
 
     try:
         pointset=conversion.conversion_point(pointset_bin)

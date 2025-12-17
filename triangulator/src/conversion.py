@@ -52,13 +52,14 @@ def conversion_triangle(triangles:list[Triangle])->str:
     
     Returns:
         str: liste de triangle en binaire
+
     """
     if(triangles is None):
         raise ConversionError("erreur binaire inexistant")
     points=[]
     for t in triangles:
         for point in t.get_points():
-            if(points.__contains__(point)==False):
+            if(not points.__contains__(point)):
                 points.append(point)
     
     bin_vert=format(len(points),"032b")

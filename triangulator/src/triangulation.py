@@ -1,4 +1,6 @@
+"""Module de triangulation utilisant l'algorithme de Bowyer-Watson."""
 from src.object import Point, Triangle
+
 
 class TriangulationError(Exception):
     """Exception s'il y a des erreur durant la triangulation."""
@@ -14,7 +16,6 @@ def start(points:list[Point])->list[Triangle]:
     :return: liste des triangles trouvé
     :rtype: list[Triangle]
     """
-    
     if(points is None):
             raise TriangulationError("erreur pointset inexistant")
     if(len(points)==0):
@@ -29,6 +30,17 @@ def start(points:list[Point])->list[Triangle]:
 
 
 def det(a: Point, b: Point, c: Point) -> float:
+    """Calcule le déterminant de trois points.
+    
+    :param a: point a
+    :type a: Point
+    :param b: point b
+    :type b: Point
+    :param c: point c
+    :type c: Point
+    :return: valeur du déterminant
+    :rtype: float
+    """# noqa: D401
     return (b.x - a.x)*(c.y - a.y) - (b.y - a.y)*(c.x - a.x)
 
 
@@ -42,15 +54,17 @@ def circumcircle_contains(tri: Triangle, p: Point) -> bool:
     :return: indique si le point est dans le rayon
     :rtype: bool
     """
-
     ax, ay = tri.point1.x, tri.point1.y
     bx, by = tri.point2.x, tri.point2.y
     cx, cy = tri.point3.x, tri.point3.y
     dx, dy = p.x, p.y
 
-    ax -= dx; ay -= dy
-    bx -= dx; by -= dy
-    cx -= dx; cy -= dy
+    ax -= dx 
+    ay -= dy
+    bx -= dx 
+    by -= dy
+    cx -= dx 
+    cy -= dy
 
     a2 = ax*ax + ay*ay
     b2 = bx*bx + by*by
@@ -74,7 +88,6 @@ def make_supertriangle(points):
     
     :param points: liste de points
     """
-
     xs = [p.x for p in points]
     ys = [p.y for p in points]
     minx, maxx = min(xs), max(xs)
@@ -94,11 +107,25 @@ def make_supertriangle(points):
 
 
 def edge_key(e):
+    """Création d'une clé unique pour une arête.
+
+    :param e: arête
+    :type e: tuple[Point, Point]
+    :return: clé unique
+    :rtype: tuple[tuple[float, float], tuple[float, float]].
+    """
     a, b = e
     return tuple(sorted([(a.x, a.y), (b.x, b.y)]))
 
 
 def unique_boundary_edges(edges):
+    """Retourne les arêtes uniques parmi une liste d'arêtes.
+
+    :param edges: liste d'arêtes
+    :type edges: list[tuple[Point, Point]]
+    :return: liste des arêtes uniques
+    :rtype: list[tuple[Point, Point]].
+    """
     count = {}
     for e in edges:
         k = edge_key(e)
@@ -146,7 +173,11 @@ def bowyer_watson(points):
     s_points = set(super_tri.get_points())
     final = []
     for tri in triangulation:
-        if (tri.point1 in s_points) or (tri.point2 in s_points) or (tri.point3 in s_points):
+        if (
+            (tri.point1 in s_points) 
+            or (tri.point2 in s_points) 
+            or (tri.point3 in s_points)
+        ):
             continue
         final.append(tri)
 

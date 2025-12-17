@@ -9,9 +9,10 @@ perf_test:
 
 coverage:
 	coverage run -m pytest -k "not perf"
+	coverage html
 
 lint:
-	ruff check src
+	ruff check src --fix
 
 doc:
-	pdoc3 src
+	pdoc3 src --html --output-dir docs --force

@@ -5,12 +5,15 @@ from urllib.error import HTTPError
 
 def appel(id:str)->str|int:
     """Fonction d'appel vers l'autre api pour recuper un pointSet.
+    
     Params:
         id(str): identifiant d'un PointSet
 
     Returns:
-        code_erreur/pointSet(int/String): de base retourne un string mais sinon retourne un chiffre correspondant au type d'erreur
-        1= BD indisponible, 2= id non trouver, 0= pour tout autre erreur
+        code_erreur/pointSet(int/String): de base retourne un string mais sinon retourne
+        un chiffre correspondant au type d'erreur.
+        1= BD indisponible, 2= id non trouver, 0= pour tout autre erreur.
+
     """
     try:
         request_url = request.urlopen(F'http://f"PointSetManager/pointset/{id}"')
